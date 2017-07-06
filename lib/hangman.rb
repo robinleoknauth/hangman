@@ -76,9 +76,14 @@ class HumanPlayer
   def check_guess(letter)
 
     puts " Your Computer guessed #{letter}"
-    puts "If there are any letters like that in your word, where are they?"
-    puts "If your word does not include the letter please type []"
-    gets.chomp.split(",").map(&:to_i)
+    puts "Is that letter included in your word?"
+    answer = gets.chomp.downcase.split('').first
+    if answer == "y"
+      puts "at which indicies are they?"
+      return gets.chomp.split(",").map(&:to_i)
+    else
+      return []
+    end
   end
 
   def pick_secret_word
