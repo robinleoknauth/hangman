@@ -156,7 +156,8 @@ end
 
 if $0 == __FILE__
   puts "Do you want to guess?"
-  if gets.chomp.downcase.split.first == "y"
+  input = gets.chomp.downcase.split('').first
+  if input == "y"
     Hangman.new.play
 
   else
