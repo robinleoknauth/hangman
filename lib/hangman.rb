@@ -4,19 +4,13 @@ class Hangman
   def initialize(
       guesser: HumanPlayer.new,
       referee: ComputerPlayer.new
-      # board: true
   )
     @dictionary = read_file
     @guesser = guesser
     @referee = referee
     @board = board
   end
-  # def initialize
-  #   @dictionary = File.readlines("lib/dictionary.txt").sample
-  #   @guesser = HumanPlayer.new
-  #   @referee = ComputerPlayer.new
-  #   @board = nil
-  # end
+
   def read_file
     File.readlines("lib/dictionary.txt").map(&:chomp)
   end
@@ -39,7 +33,7 @@ class Hangman
   end
 
   def won?
-    @board.none? { |el| el.nil? }
+    @board.none?(&:nil?)
   end
 
   def play
@@ -59,7 +53,7 @@ class Hangman
       break if won?
     end
 
-    puts "The word was #{board.join("")}"
+    puts "The word was #{board.join('')}"
   end
 
 end
@@ -80,9 +74,11 @@ class HumanPlayer
   end
 
   def check_guess(letter)
+
     puts " Your Computer guessed #{letter}"
     puts "If there are any letters like that in your word, where are they?"
-    gets.chomp.split(",").map { |e| e.to_i }
+    puts "If your word does not include the letter please type []"
+    gets.chomp.split(",").map(&:to_i)
   end
 
   def pick_secret_word
@@ -124,18 +120,11 @@ class ComputerPlayer
     guessed_letter
   end
 
-  # def delete_word
-  #   @candidate_words.reject! do |word|
-  #     word.chars.any? { |letter| @guessed_letters.include?(letter) }
-  #   end
-  # end
-
   def letter_count
-    # alphabet = ("a".."z").to_a
     count_hash = Hash.new(0)
     @candidate_words.each do |word|
       word.chars.each do |ch|
-        count_hash[ch] += 1 #if alphabet.include?(ch)
+        count_hash[ch] += 1
       end
     end
     count_hash
@@ -171,8 +160,6 @@ if $0 == __FILE__
     Hangman.new.play
 
   else
-    # puts "ok. Have a nice day!"
-    Hangman.new({guesser: ComputerPlayer.new, referee: HumanPlayer.new}).play
+    Hangman.new(guesser: ComputerPlayer.new, referee: HumanPlayer.new).play
   end
-  # ComputerPlayer.new.pick_secret_word
 end
