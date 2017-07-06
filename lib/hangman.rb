@@ -23,6 +23,10 @@ class Hangman
 
   def take_turn
     guess = guesser.guess(board)
+    if guesser.guess(board) == false
+      puts "Seems like there is no such word in the dictionary!"
+      exit
+    end
     position = referee.check_guess(guess)
     update_board(board, guess, position)
     guesser.handle_response(guess, position)
@@ -119,7 +123,13 @@ class ComputerPlayer
 
   def guess(board)
     guessed_letter = letter_count
+    
+    if guessed_letter == {}
+
+      return false
+    end
     guessed_letter.reject! { |letter, _count| board.include?(letter) }
+
     guessed_letter = guessed_letter.max_by { |_letter, count| count }[0]
     @guessed_letters << guessed_letter
     guessed_letter
