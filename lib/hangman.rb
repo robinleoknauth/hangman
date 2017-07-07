@@ -9,6 +9,7 @@ class Hangman
     @guesser = guesser
     @referee = referee
     @board = board
+    @wrong_guesses = 0
   end
 
   def read_file
@@ -23,12 +24,16 @@ class Hangman
 
   def take_turn
     guess = guesser.guess(board)
-    if guesser.guess(board) == false
+
+    if guess == false
       puts "Seems like there is no such word in the dictionary!"
       exit
     end
     position = referee.check_guess(guess)
     update_board(board, guess, position)
+    if position.empty?
+      @wrong_guesses += 1
+    end
     guesser.handle_response(guess, position)
   end
 
@@ -52,6 +57,7 @@ class Hangman
           el
         end
       end
+      display_hangman(@wrong_guesses)
       p display.join("")
       take_turn
       break if won?
@@ -60,15 +66,78 @@ class Hangman
     puts "The word was >>  #{board.join('')}  <<"
   end
 
+  def display_hangman(counter)
+    if counter == 0
+      puts "------"
+      puts "|"
+      puts "|"
+      puts "|"
+      puts "|"
+      puts "|"
+      puts "------------"
+    elsif counter == 1
+      puts "------"
+      puts "|    |"
+      puts "|    O"
+      puts "|"
+      puts "|"
+      puts "|"
+      puts "------------"
+    elsif counter == 2
+      puts "------"
+      puts "|    |"
+      puts "|    O"
+      puts "|    |"
+      puts "|"
+      puts "|"
+      puts "------------"
+    elsif counter == 3
+      puts "------"
+      puts "|    |"
+      puts "|    O"
+      puts "|   /|\\"
+      puts "|"
+      puts "|"
+      puts "------------"
+    elsif counter == 4
+      puts "------"
+      puts "|    |"
+      puts "|    O"
+      puts "|   /|\\"
+      puts "|    |"
+      puts "|"
+      puts "------------"
+    elsif counter == 5
+      puts "------"
+      puts "|    |"
+      puts "|    O"
+      puts "|   /|\\"
+      puts "|    |"
+      puts "|   / \\"
+      puts "------------"
+      if @referee.class == ComputerPlayer
+        puts "You dead. Your death sentence was \"#{@referee.secret}\". Bummer."
+      else
+        puts "Seems like your poor 'puter couldn't solve it. Now he is dead. Bummer."
+      end
+      exit
+    end
+  end
+
 end
 
 class HumanPlayer
+  # def secret
+  #   "impossible to find out for your poor 'puter!'"
+  # end
+
   def guess(board)
     puts "What letter do you want to guess?"
     gets.chomp.downcase
   end
 
   def register_secret_length(secret)
+    @secret = secret
     puts "The secret word is #{secret} characters long"
 
   end
