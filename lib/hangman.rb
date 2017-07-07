@@ -57,7 +57,7 @@ class Hangman
       break if won?
     end
 
-    puts "The word was #{board.join('')}"
+    puts "The word was >>  #{board.join('')}  <<"
   end
 
 end
@@ -83,7 +83,7 @@ class HumanPlayer
     puts "Is that letter included in your word?"
     answer = gets.chomp.downcase.split('').first
     if answer == "y"
-      puts "at which indicies are they?"
+      puts "At which index/indicies are they?"
       return gets.chomp.split(",").map(&:to_i)
     else
       return []
@@ -123,7 +123,7 @@ class ComputerPlayer
 
   def guess(board)
     guessed_letter = letter_count
-    
+
     if guessed_letter == {}
 
       return false
@@ -170,7 +170,7 @@ end
 
 
 if $0 == __FILE__
-  puts "Do you want to guess?"
+  puts "You can be either the referee or the guesser. Do you want to guess?"
   input = gets.chomp.downcase.split('').first
   if input == "y"
     Hangman.new.play
